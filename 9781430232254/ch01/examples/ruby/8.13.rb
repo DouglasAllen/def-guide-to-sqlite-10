@@ -3,11 +3,12 @@
 require 'sqlite3'
 
 db = SQLite3::Database.new(File.join(__FILE__, '../seinfeld.db'))
+
 db.results_as_hash = true
 
 # Named paramters
 
-stmt = db.prepare('SELECT * FROM foods where name like :name')
+stmt = db.prepare('select * from foods where name like :name')
 stmt.bind_param(':name', '%Peach%')
 
 stmt.execute do |result|
@@ -18,8 +19,8 @@ end
 
 # Positional paramters
 
-stmt = db.prepare('SELECT * FROM foods where name like ?')
-stmt.bind_params('%Bobka%')
+stmt = db.prepare('select * from foods where name like ? or type_id = ?')
+stmt.bind_params('%Bobka%', 1)
 
 stmt.execute do |result|
   result.each do |row|

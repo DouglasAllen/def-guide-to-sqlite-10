@@ -2,11 +2,11 @@
 
 require 'sqlite3'
 
-db = SQLite3::Database.new( "seinfeld.db" )
+db = SQLite3::Database.new(File.join(__FILE__, '../seinfeld.db'))
 db.results_as_hash = true
 
 food_id = 1
-File.open('foods.txt') do |f|
+File.open(File.join(__FILE__, '../foods.txt')) do |f|
   f.each do |line|
     items = line.split('|')
 
@@ -14,9 +14,9 @@ File.open('foods.txt') do |f|
     food = items[1]
     eps = items[2].split(',')
 
-    print "insert into foods values(%i, '%s', '%s');\n" % [food_id,type,food]
+    print "insert into foods values(%i, '%s', '%s');\n" % [food_id, type, food]
 
-    eps.each do |e| 
+    eps.each do |e|
       e = e.strip
 
       sql = "select id from episodes where name='%s'" % e
@@ -28,19 +28,11 @@ File.open('foods.txt') do |f|
         rows += 1
       end
 
-      if rows == 0
-        print "NONE #{food}, #{sql}\n"
-      end
-
+      print "NONE #{food}, #{sql}\n" if rows.zero?
     end
 
     food_id += 1
-
   end
 end
 
-
-
-
-#db.query(sql)
-
+# db.query(sql)

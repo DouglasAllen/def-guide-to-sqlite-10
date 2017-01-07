@@ -17,4 +17,4 @@ result.each do | row |
   puts row[0]
 end
 
-stmt.close()
+stmt.close
